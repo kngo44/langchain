@@ -1,22 +1,19 @@
-from langchain.llms import openai
-from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain
-from dotenv import load_dotenv
+import langchain_helper as lch
+import streamlit as st
 
-load_dotenv()
+st.title("Project name generator")
 
-def generate_project_name(project_description):
-    llm = openai(temperature=0.7)
+user_project_type = st.sidebar.selectbox("What type of project are you creating?",("Web App", "Content Creation", "Music"))
 
-    prompt_template_name = PromptTemplate(
-        input_variables=['project_description'],
-        template="I am developing a website that {project_description} and I want a cool name for it. Suggest me five cool names for my project."
-    )
+if user_project_type == "Web App":
+    project_description = st.sidebar.text_area(label="Give a description of what your web app does.", max_chars=150)
 
-    name_chain = LLMChain(llm=llm, prompt=prompt_template_name)
+if user_project_type == "Content Creation":
+    project_description = st.sidebar.text_area(label="Give a description of what your content is.", max_chars=150)
 
-    response = name_chain({'project_description': project_description})
-    return response
+if user_project_type == "Music":
+    project_description = st.sidebar.text_area(label="Give a description of what your genre is.", max_chars=150)
 
-if __name__ == "__main__":
-    print (generate_project_name("generates personalized mock interviews"))
+if project_description:
+    response = lch.generate_project_name(project_description, user_project_type)
+    st.text(response['project_name'])
