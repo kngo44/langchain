@@ -3,3 +3,6 @@ openai
 streamlit
 python-dotenv
 langchain-openai
+langchain-community
+youtube-transcript-api
+faiss-cpu
