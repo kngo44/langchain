@@ -20,6 +20,6 @@ with st.sidebar:
 
 if query and youtube_url:
     db = assist.yt_vectordb(youtube_url)
-    response, docs = assist.query_response(db, query)
+    response = assist.query_response(db, query)
     st.subheader("Answer:")
     st.text(textwrap.fill(response, width=80))

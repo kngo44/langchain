@@ -3,7 +3,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_openai import ChatOpenAI
 from langchain_openai import OpenAIEmbeddings
 from langchain_core.prompts import PromptTemplate
-from langchain.chains import ConversationalRetrievalChain
+from langchain_core.output_parsers import StrOutputParser
 from langchain_community.vectorstores import FAISS
 from dotenv import load_dotenv
 import os
@@ -50,10 +50,10 @@ def query_response(db, query, k=4):
         """
     )
 
-    chain = ConversationalRetrievalChain.from_llm(llm, retriever=db.as_retriever(), prompt=prompt)
+    chain = prompt | llm | StrOutputParser()
 
-    response = chain({"question": query, "chat_history": [], "docs": docs_page_content})
+    response = chain.invoke({"question": query, "docs": docs_page_content})
     response = response.replace("\n", "")
     return response
 
-print(query_response(yt_vectordb("https://youtu.be/-Osca2Zax4Y?si=iyOiePxzUy_bUayO"), "What did they talk about Ransomware"))
+# print(query_response(yt_vectordb("https://youtu.be/-Osca2Zax4Y?si=iyOiePxzUy_bUayO"), "What did they talk about Ransomware"))
